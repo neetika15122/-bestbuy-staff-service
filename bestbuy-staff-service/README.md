@@ -165,6 +165,51 @@ docker tag bestbuy-staff-service:latest username/bestbuy-staff-service:latest
 ```bash
 docker push pras0044/bestbuy-staff-service:latest
 ``` 
+## Step 5: Set Up Secrets
+1. Go to **Settings** > **Secrets and variables** > **Actions** in the `bestbuy-staff-service` repository.
+
+2. Add the following repository secrets:
+   - `DOCKER_USERNAME`: Your Docker Hub username.
+   - `DOCKER_PASSWORD`: Your Docker Hub password.
+   - `KUBE_CONFIG_DATA`: Base64-encoded content of your Kubernetes configuration file (`kubeconfig`). This is used for authentication with your Kubernetes cluster.
+
+3. Run the following commands to get `KUBE_CONFIG_DATA` after connecting to your AKS cluster:
+
+```bash 
+cat ~/.kube/config | base64 -w 0 > kube_config_base64.txt
+```
+4. ## Set Up Environment Variables (Repository Variables)
+
+1. Go to **Settings** > **Secrets and variables** > **Actions** in each forked repository.
+
+2. Add the following repository variables:
+   - `DOCKER_IMAGE_NAME`: The name of the Docker image to be built, tagged, and pushed (For example: `store-front-l9`).
+   - `DEPLOYMENT_NAME`: The name of the Kubernetes deployment to update (For example: `store-front`).
+   - `CONTAINER_NAME`: The name of the container within the Kubernetes deployment to update (For example: `store-front`).
+
+3. Understand the workflow:
+The `ci_cd.yaml` file defines a GitHub Actions workflow that automates the CI/CD pipeline for your application.
+## Key Workflow Steps
+
+### Trigger:
+The workflow is triggered whenever code is pushed to the main branch.
+```bash 
+on:
+  push:
+    branches:
+      - main
+```
+## Jobs:
+
+- **Build**: Builds and pushes a Docker image for the service to Docker Hub.
+- **Test**: Runs unit and integration tests.
+- **Release**: Promotes the Docker image to the latest tag.
+- **Deploy**: Deploys the application to AKS.
+
+## Secrets and Environment Variables:
+
+Environment Variables and secrets are securely injected into the workflow.
+
 
 ## Installation and Usage
 1. Clone the repository:
