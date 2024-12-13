@@ -3,7 +3,85 @@
 ## Overview
 For Best Buy's internal systems, staff information is managed by the `staff-service` microservice. For CRUD operations, it offers REST APIs to manage employee data, including name, position, department, email, and phone number.
 
-## API Endpoints
+## Objectives
+1. Develop the Staff-Service Microservice.
+2. Containerize the Service.
+3. Deploy to Azure Kubernetes Service (AKS).
+4. Set Up CI/CD Pipeline.
+5. Test the CI/CD Pipeline.
+
+## Step 1: Clone the BestBuy-Staff-Service Repository
+To begin, clone the [**BestBuyApp**](https://github.com/neetika15122/-bestbuy-staff-service.git) repository, which contains all necessary deployment files.
+
+## Step 2: Create an Azure Kubernetes Cluster (AKS)
+1. **Log in to Azure Portal:**
+   - Go to [https://portal.azure.com](https://portal.azure.com) and log in with your Azure account.
+
+2. **Create a Resource Group:**
+   - In the Azure Portal, search for **Resource Groups** in the search bar.
+   - Click **Create** and fill in the following:
+     - **Resource group name**: `ExamResource`
+     - **Region**: `Central Canada`.
+   - Click **Review + Create** and then **Create**.
+
+3. **Create an AKS Cluster:**
+   - In the search bar, type **Kubernetes services** and click on it.
+   - Click **Create** and select **Kubernetes cluster**
+   - In the `Basics` tap fill in the following details:
+     - **Subscription**: Select your subscription.
+     - **Resource group**: Choose `ExamResource`.
+     - **Cluster preset configuration**: Choose `Dev/Test`.
+     - **Kubernetes cluster name**: `StaffCluster`.
+     - **Region**: Same as your resource group (e.g., `Central Canada`).
+     - **Availability zones**: `None`.
+     - **AKS pricing tier**: `Free`.
+     - **Kubernetes version**: `Default`.
+     - **Automatic upgrade**: `Disabled`.
+     - **Automatic upgrade scheduler**: `No schedule`.
+     - **Node security channel type**: `None`.
+     - **Security channel scheduler**: `No schedule`.
+     - **Authentication and Authorization**: `Local accounts with Kubernetes RBAC`.
+   - In the `Node pools` tap fill in the following details:
+     - Select **agentpool**. Optionally change its name to `masternodes`. This nodes will have the controlplane.
+        - Set **node size** to `D2as_v4`.
+        - **Scale method**: `Manual`
+        - **Node count**: `1`
+        - Click `update`
+     - Click on **Add node pool**:
+        - **Node pool name**: `workernodes`.
+        - **Mode**: `User` 
+        - Set **node size** to `D2as_v4`.
+        - **Scale method**: `Manual`
+        - **Node count**: `1`
+        - Click `add`
+   - Click **Review + Create**, and then **Create**. The deployment will take a few minutes.
+
+## Step 3: Connect to AKS Cluster
+   - Once the AKS cluster is deployed, navigate to the cluster in the Azure Portal.
+   - In the overview page, click on **Connect**. 
+   - Select **Azure CLI** tap. You will need Azure CLI. If you don't have it: [**Install Azure CLI**](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+   - Login to your azure account using the following command:
+      ```
+      az login
+      ```
+   - Set the cluster subscription using the command shown in the portal (it will look something like this):
+      ```
+      az account set --subscription 'subscribtion-id'
+      ```
+
+   - Copy the command shown in the portal for configuring `kubectl` (it will look something like this):
+     ```
+     az aks get-credentials --resource-group BestBuyResource --name BestBuyCluster 
+     ```
+
+   - Verify Cluster Access:
+      - Test your connection to the AKS cluster by listing all nodes:
+        ```
+        kubectl get nodes
+        ```
+        You should see details of the nodes in your AKS cluster if the connection is successful.
+
+## Step 4 API Endpoints
 To enable AI-generated product descriptions and image generation features, you will deploy the required **Azure OpenAI Services** for GPT-4 (text generation) and DALL-E 3 (image generation). This step is essential to configure the **AI Service** component in the Algonquin Pet Store application.
 
 ### Task 1: Create an Azure OpenAI Service Instance
@@ -73,6 +151,20 @@ To enable AI-generated product descriptions and image generation features, you w
 5. **Delete Staff**
    - `DELETE /staff/<staff_id>`
    - Response: Details of a staff member were deleted..
+
+## Step 5: Build, Tag and Push the Docker Image
+### **Task 1: Build the Docker Images for staff-service repository **
+```bash 
+docker build -t bestbuy-staff-service:latest .
+```
+### **Task 2: Tag the Docker Images for staff-service repository **
+```bash
+docker tag bestbuy-staff-service:latest username/bestbuy-staff-service:latest
+```
+### **Task 3: Push the Docker Images for staff-service repository **
+```bash
+docker push pras0044/bestbuy-staff-service:latest
+``` 
 
 ## Installation and Usage
 1. Clone the repository:
