@@ -1,0 +1,43 @@
+### Get All Staff
+GET http://127.0.0.1:5000/staff
+Accept: application/json
+
+###
+
+### Create a New Staff Member
+POST http://127.0.0.1:5000/staff
+Content-Type: application/json
+
+{
+    "name": "Mark Jonathan",
+    "position": "Front-end Manager",
+    "department": "Sales",
+    "email": "mark.jonathan@example.com",
+    "phone": "9087654321"
+}
+
+###
+
+### Get a Specific Staff Member
+# Replace {staff_id} with an actual staff ID returned from the "Create" API
+GET http://127.0.0.1:5000/staff/{staff_id}
+Accept: application/json
+
+###
+
+### Update a Staff Member
+# Replace {staff_id} with an actual staff ID
+PUT http://127.0.0.1:5000/staff/{staff_id}
+Content-Type: application/json
+
+{
+    "position": "Senior Manager",
+    "phone": "0987654321"
+}
+
+###
+
+### Delete a Staff Member
+# Replace {staff_id} with an actual staff ID
+DELETE http://127.0.0.1:5000/staff/{staff_id}
+Accept: application/json
