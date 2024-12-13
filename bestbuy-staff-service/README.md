@@ -210,9 +210,21 @@ on:
 
 Environment Variables and secrets are securely injected into the workflow.
 
+## Step 5: Test the CI/CD Pipeline
+## Monitor Workflow Execution:
+
+- Go to the **Actions** tab in the repository and verify the progress of the workflow jobs (Build, Test, Release, Deploy).
+
+## Validate Deployment:
+
+- Use `kubectl` commands to check the deployment status:
+  - `kubectl get pods`
+  - `kubectl get services`
+
 
 ## Installation and Usage
 1. Clone the repository:
    ```bash
    git clone <repo-url>
    cd bestbuy-staff-service
+   ```
