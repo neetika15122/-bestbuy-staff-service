@@ -1,0 +1,61 @@
+# Deployment for Product Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: staff-service
+spec:
+  replicas: 1 # Single replica
+  selector:
+    matchLabels:
+      app: staff-service
+  template:
+    metadata:
+      labels:
+        app: staff-service
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: staff-service
+          image: pras0044/bestbuy-staff-service:latest # Custom product service image
+          ports:
+            - containerPort: 8000 # Product service listens on this port
+          env: # Environment variables for configuration
+            - name: STAFF_SERVICE_URL
+              value: "http://staff-service:8000/" # URL for AI service integration
+          resources: # Resource requests and limits
+            requests:
+              cpu: 1m
+              memory: 1Mi
+            limits:
+              cpu: 2m
+              memory: 20Mi
+          readinessProbe: # Ready status probe
+            httpGet:
+              path: /health
+              port: 8000
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe: # Ongoing health check
+            httpGet:
+              path: /health
+              port: 8000
+            failureThreshold: 5
+            initialDelaySeconds: 3
+            periodSeconds: 3
+---
+# Service for Product Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: staff-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8000 # Service port
+      targetPort: 8000
+  selector:
+    app: staff-service
+---
