@@ -17,7 +17,7 @@ spec:
         "kubernetes.io/os": linux
       containers:
         - name: staff-service
-          image: pras0044/bestbuy-staff-service:latest # Custom product service image
+          image: pras0044/staff-service:final2 # Custom product service image
           ports:
             - containerPort: 8000 # Product service listens on this port
           env: # Environment variables for configuration

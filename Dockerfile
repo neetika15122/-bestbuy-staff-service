@@ -1,14 +1,14 @@
-# Use an official Python image as a base
-FROM python:3.9-slim
+# Use an official Node.js image as a base
+FROM node:18
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements.txt file into the container
-COPY requirements.txt .
+# Copy the package.json and package-lock.json (if available) into the container
+COPY package*.json ./
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN npm install
 
 # Copy the entire project into the container
 COPY . .
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5000
 
 # Set the default command to run the application
-CMD ["python", "app.py"]
+CMD ["node", "app.js"]
