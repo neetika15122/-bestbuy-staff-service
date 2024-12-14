@@ -221,6 +221,7 @@ Environment Variables and secrets are securely injected into the workflow.
   - `kubectl get pods`
   - `kubectl get services`
 
+![alt text](image.png)
 
 ## Installation and Usage
 1. Clone the repository:
