@@ -229,3 +229,9 @@ Environment Variables and secrets are securely injected into the workflow.
    git clone <repo-url>
    cd bestbuy-staff-service
    ```
+
+
+   Issue- I was unable to deploy Docker image, I have updated the secrets, deployment, and and Keys.... 
+   I was getting isssue in the deployment, and same didnt work for CI/CD Deployment..
+   Please look into it..
+   
